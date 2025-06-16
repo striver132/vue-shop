@@ -1,0 +1,62 @@
+<mxfile host="65bd71144e">
+    <diagram id="C5RBs43oDa-KdzZeNtuy" name="E-commerce ERD">
+        <mxGraphModel dx="1223" dy="898" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="WIyWlLk6GJQsqaUBKTNV-0"/>
+                <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0"/>
+                
+                <!-- Products Entity -->
+                <mxCell id="Products" value="Products&#10;------------------&#10;id (PK)&#10;name&#10;description&#10;price&#10;originalPrice&#10;image&#10;images[]&#10;categoryId (FK)&#10;tags[]&#10;stock&#10;rating&#10;reviews&#10;isRecommended&#10;isNewArrival&#10;specifications" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=260;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+                    <mxGeometry x="320" y="120" width="160" height="260" as="geometry"/>
+                </mxCell>
+
+                <!-- Categories Entity -->
+                <mxCell id="Categories" value="Categories&#10;------------------&#10;id (PK)&#10;name&#10;code&#10;icon" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=100;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+                    <mxGeometry x="40" y="120" width="160" height="100" as="geometry"/>
+                </mxCell>
+
+                <!-- Users Entity -->
+                <mxCell id="Users" value="Users&#10;------------------&#10;id (PK)&#10;username&#10;email&#10;avatar&#10;role&#10;createdAt" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=140;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+                    <mxGeometry x="320" y="440" width="160" height="140" as="geometry"/>
+                </mxCell>
+
+                <!-- Orders Entity -->
+                <mxCell id="Orders" value="Orders&#10;------------------&#10;id (PK)&#10;userId (FK)&#10;products[]&#10;totalAmount&#10;status&#10;createdAt&#10;shippingAddress" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=160;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+                    <mxGeometry x="600" y="440" width="160" height="160" as="geometry"/>
+                </mxCell>
+
+                <!-- Cart Entity -->
+                <mxCell id="Cart" value="Cart&#10;------------------&#10;id (PK)&#10;userId (FK)&#10;productId (FK)&#10;quantity&#10;createdAt" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=120;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+                    <mxGeometry x="600" y="120" width="160" height="120" as="geometry"/>
+                </mxCell>
+
+                <!-- Carousels Entity -->
+                <mxCell id="Carousels" value="Carousels&#10;------------------&#10;id (PK)&#10;title&#10;subtitle&#10;image&#10;link&#10;active" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=140;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+                    <mxGeometry x="40" y="440" width="160" height="140" as="geometry"/>
+                </mxCell>
+
+                <!-- Relationships -->
+                <!-- Categories - Products -->
+                <mxCell id="CategoryProduct" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Categories" target="Products">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- Users - Orders -->
+                <mxCell id="UserOrders" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Users" target="Orders">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- Users - Cart -->
+                <mxCell id="UserCart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Users" target="Products">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- Products - Cart -->
+                <mxCell id="ProductCart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Products" target="Cart">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile> 

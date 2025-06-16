@@ -1,0 +1,233 @@
+{
+  "carousels": [
+    {
+      "id": 1,
+      "title": "夏季新品系列",
+      "subtitle": "探索清爽时尚",
+      "image": "/c1.png",
+      "link": "/collections/summer",
+      "active": true
+    },
+    {
+      "id": 2,
+      "title": "限时特惠",
+      "subtitle": "精选商品低至5折",
+      "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/0ca9a36a-73e6-4dc8-bf46-150eab0f0778/AS+M+NK+DF+TEE+RUN+ENERGY+SP25.png",
+      "link": "/promotions",
+      "active": true
+    },
+    {
+      "id": 3,
+      "title": "独家合作系列",
+      "subtitle": "发现独特设计",
+      "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/902c1320-45a1-43b4-af03-eadb48ffab8d/PSG+MNK+DF+ACDPR+SSTOP+K+HA+PM.png",
+      "link": "/collections/exclusive",
+      "active": true
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "男装",
+      "code": "men",
+      "icon": "👔"
+    },
+    {
+      "id": 2,
+      "name": "女装",
+      "code": "women",
+      "icon": "👗"
+    },
+    {
+      "id": 3,
+      "name": "鞋履",
+      "code": "shoes",
+      "icon": "👟"
+    },
+    {
+      "id": 4,
+      "name": "配饰",
+      "code": "accessories",
+      "icon": "👜"
+    },
+    {
+      "id": 5,
+      "name": "运动",
+      "code": "sports",
+      "icon": "🏃"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "经典休闲衬衫",
+      "description": "采用优质棉料，舒适透气，简约百搭",
+      "price": 299,
+      "originalPrice": 399,
+      "image": "https://picsum.photos/400/400?random=1",
+      "images": [
+        "https://picsum.photos/400/400?random=1",
+        "https://picsum.photos/400/400?random=2",
+        "https://picsum.photos/400/400?random=3"
+      ],
+      "categoryId": 1,
+      "tags": ["新品", "热销"],
+      "stock": 100,
+      "rating": 4.5,
+      "reviews": 128,
+      "isRecommended": true,
+      "isNewArrival": true,
+      "specifications": {
+        "材质": "100%棉",
+        "产地": "中国",
+        "款式": "修身"
+      }
+    },
+    {
+      "id": 2,
+      "name": "优雅连衣裙",
+      "description": "优雅气质，修身显瘦，适合各种场合",
+      "price": 399,
+      "originalPrice": 599,
+      "image": "https://picsum.photos/400/400?random=4",
+      "images": [
+        "https://picsum.photos/400/400?random=4",
+        "https://picsum.photos/400/400?random=5",
+        "https://picsum.photos/400/400?random=6"
+      ],
+      "categoryId": 2,
+      "tags": ["热销", "特惠"],
+      "stock": 50,
+      "rating": 4.8,
+      "reviews": 256,
+      "isRecommended": true,
+      "isNewArrival": false,
+      "specifications": {
+        "材质": "聚酯纤维",
+        "产地": "中国",
+        "款式": "A字裙"
+      }
+    },
+    {
+      "id": 3,
+      "name": "运动休闲鞋",
+      "description": "轻盈舒适，防滑耐磨，时尚百搭",
+      "price": 599,
+      "originalPrice": 799,
+      "image": "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/c15e159e-4992-4c26-bd84-8f98b5cfa900/NIKE+FIELD+GENERAL.png",
+      "images": [
+        "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/4ff957d1-f266-4c35-8b6f-225e07de7e1d/NIKE+FIELD+GENERAL.png",
+        "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/b87a1e68-6469-4fdc-95d4-c730cf4cc44f/NIKE+FIELD+GENERAL.png",
+        "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/524cd2d7-f2d2-4898-8299-5637d87408ec/NIKE+FIELD+GENERAL.pn"
+      ],
+      "categoryId": 3,
+      "tags": ["新品"],
+      "stock": 80,
+      "rating": 4.6,
+      "reviews": 89,
+      "isRecommended": true,
+      "isNewArrival": true,
+      "specifications": {
+        "材质": "网布+橡胶",
+        "产地": "越南",
+        "款式": "运动"
+      }
+    },
+    {
+      "id": 4,
+      "name": "时尚单肩包",
+      "description": "简约时尚，实用大方，容量适中",
+      "price": 499,
+      "originalPrice": 699,
+      "image": "https://picsum.photos/400/400?random=10",
+      "images": [
+        "https://picsum.photos/400/400?random=10",
+        "https://picsum.photos/400/400?random=11",
+        "https://picsum.photos/400/400?random=12"
+      ],
+      "categoryId": 4,
+      "tags": ["热销", "特惠"],
+      "stock": 30,
+      "rating": 4.7,
+      "reviews": 156,
+      "isRecommended": true,
+      "isNewArrival": false,
+      "specifications": {
+        "材质": "PU革",
+        "产地": "中国",
+        "款式": "单肩"
+      }
+    },
+    {
+      "id": 5,
+      "name": "牛仔外套",
+      "description": "经典牛仔设计，耐穿百搭",
+      "price": 459,
+      "originalPrice": 559,
+      "image": "https://picsum.photos/400/400?random=13",
+      "images": [
+        "https://picsum.photos/400/400?random=13",
+        "https://picsum.photos/400/400?random=14",
+        "https://picsum.photos/400/400?random=15"
+      ],
+      "categoryId": 1,
+      "tags": ["新品"],
+      "stock": 60,
+      "rating": 4.4,
+      "reviews": 45,
+      "isRecommended": true,
+      "isNewArrival": true,
+      "specifications": {
+        "材质": "牛仔布",
+        "产地": "中国",
+        "款式": "宽松"
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "test_user",
+      "email": "test@example.com",
+      "avatar": "https://picsum.photos/100/100",
+      "role": "user",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "userId": 1,
+      "products": [
+        {
+          "productId": 1,
+          "quantity": 1,
+          "price": 299
+        },
+        {
+          "productId": 2,
+          "quantity": 1,
+          "price": 399
+        }
+      ],
+      "totalAmount": 698,
+      "status": "pending",
+      "createdAt": "2024-03-15T10:00:00.000Z",
+      "shippingAddress": {
+        "name": "张三",
+        "phone": "13800138000",
+        "address": "北京市朝阳区xxx街道xxx号",
+        "zipCode": "100000"
+      }
+    }
+  ],
+  "cart": [
+    {
+      "id": 1,
+      "userId": 1,
+      "productId": 1,
+      "quantity": 1,
+      "createdAt": "2024-03-15T10:00:00.000Z"
+    }
+  ]
+}
