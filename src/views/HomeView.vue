@@ -130,7 +130,7 @@ const handleNavigation = (path) => {
             <img :src="product.image" :alt="product.name">
           </div>
           <div class="product-info">
-            <span class="product-category">{{ product.categoryId }}</span>
+            <!-- <span class="product-category">{{ product.categoryId }}</span> -->
             <h3 class="product-name">{{ product.name }}</h3>
             <p class="product-price">
               <span class="current-price">¥{{ product.price }}</span>

@@ -33,19 +33,39 @@ const router = createRouter({
       path: '/product/:id',
       name: 'product',
       component: ProductDetailView
+    },
+    {
+      path: '/shop',
+      name: 'shop',
+      component: () => import('@/views/ShopView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: () => import('@/views/SearchView.vue')
+    },
+    {
+      path: '/orders',
+      name: 'orders',
+      component: () => import('@/views/OrdersView.vue')
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: () => import('@/views/CheckoutView.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/order/:id',
+      name: 'order-detail',
+      component: () => import('@/views/OrderDetailView.vue'),
+      meta: {
+        requiresAuth: true
+      }
     }
-    // {
-    //   path: '/shop',
-    //   name: 'shop',
-    //   component: () => import('@/views/ShopView.vue'),
-    //   meta: { requiresAuth: true }
-    // },
-    // {
-    //   path: '/account',
-    //   name: 'account',
-    //   component: () => import('@/views/AccountView.vue'),
-    //   meta: { requiresAuth: true }
-    // }
   ]
 })
 

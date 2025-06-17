@@ -11,7 +11,6 @@
         <router-link to="/" class="nav-link">首页</router-link>
         <router-link to="/shop" class="nav-link">商城</router-link>
         <router-link to="/new-arrivals" class="nav-link">新品</router-link>
-        <router-link to="/blog" class="nav-link">博客</router-link>
         <router-link to="/about" class="nav-link">联系我们</router-link>
       </div>
 
@@ -23,11 +22,9 @@
         
         <!-- 用户菜单 -->
         <div class="user-menu" v-if="userStore.isAuthenticated">
-          <button 
-            class="action-btn" 
-            @click="showUserMenu = !showUserMenu"
-            @blur="setTimeout(() => showUserMenu = false, 200)"
-          >
+          <div class="avatar" 
+               ref="userAvatarRef"
+               @click="toggleUserMenu">
             <img 
               v-if="userStore.userInfo?.avatar"
               :src="userStore.userInfo.avatar"
@@ -35,9 +32,12 @@
               :alt="userStore.userInfo.username"
             >
             <i v-else class="fas fa-user"></i>
-          </button>
+            <span class="username">{{ userStore.userInfo.username }}</span>
+          </div>
           
-          <div class="user-dropdown" v-show="showUserMenu">
+          <div class="user-dropdown" 
+               v-show="showUserMenu"
+               ref="userMenuRef">
             <router-link to="/account" class="dropdown-item">
               <i class="fas fa-user-circle"></i>
               个人中心
@@ -115,6 +115,8 @@ export default defineComponent({
     const isSearchOpen = ref(false)
     const searchQuery = ref('')
     const showUserMenu = ref(false)
+    const userMenuRef = ref(null)
+    const userAvatarRef = ref(null)
 
     // 处理滚动效果
     const handleScroll = () => {
@@ -158,16 +160,32 @@ export default defineComponent({
       router.push('/login')
     }
 
+    // 处理点击外部关闭
+    const handleClickOutside = (event) => {
+      if (userMenuRef.value && userAvatarRef.value && 
+          !userMenuRef.value.contains(event.target) && 
+          !userAvatarRef.value.contains(event.target)) {
+        showUserMenu.value = false
+      }
+    }
+
+    // 切换菜单显示状态
+    const toggleUserMenu = () => {
+      showUserMenu.value = !showUserMenu.value
+    }
+
     // 生命周期钩子
     onMounted(() => {
       window.addEventListener('scroll', handleScroll)
       if (userStore.isAuthenticated) {
         cartStore.fetchCartList()
       }
+      document.addEventListener('click', handleClickOutside)
     })
 
     onUnmounted(() => {
       window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('click', handleClickOutside)
     })
 
     return {
@@ -182,7 +200,10 @@ export default defineComponent({
       toggleSearch,
       closeSearch,
       handleSearch,
-      handleLogout
+      handleLogout,
+      userMenuRef,
+      userAvatarRef,
+      toggleUserMenu
     }
   }
 })
@@ -375,33 +396,53 @@ export default defineComponent({
   position: relative;
 }
 
-.user-avatar {
-  width: 24px;
-  height: 24px;
+.avatar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.avatar:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.avatar img {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.username {
+  color: #333;
+  font-size: 14px;
 }
 
 .user-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
+  width: 200px;
   background: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 8px 0;
-  min-width: 160px;
-  z-index: 1000;
   margin-top: 8px;
+  z-index: 1000;
 }
 
 .dropdown-item {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
+  gap: 12px;
+  padding: 12px 16px;
   color: #333;
   text-decoration: none;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s;
   cursor: pointer;
   border: none;
   background: none;
@@ -410,20 +451,44 @@ export default defineComponent({
   font-size: 14px;
 }
 
-.dropdown-item i {
-  margin-right: 8px;
-  width: 16px;
+.dropdown-item:hover {
+  background-color: #f5f5f5;
 }
 
-.dropdown-item:hover {
-  background: #f5f5f5;
+.dropdown-item i {
+  font-size: 16px;
+  color: #666;
 }
 
 .dropdown-item.logout {
   color: #f44336;
 }
 
-.dropdown-item.logout:hover {
-  background: #ffebee;
+.dropdown-item.logout i {
+  color: #f44336;
+}
+
+/* 添加三角形指示器 */
+.user-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 20px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  transform: rotate(45deg);
+  box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .user-dropdown {
+    width: 180px;
+  }
+
+  .username {
+    display: none;
+  }
 }
 </style> 
