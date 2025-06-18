@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { getOrderDetail, updateOrderStatus } from '@/api/orders'
 import { getProductDetail } from '@/api/cart'
 import { useUserStore } from '@/stores/user'
+import { toast } from '@/utils/toast'
 
 const route = useRoute()
 const router = useRouter()
@@ -72,10 +73,10 @@ const handlePayOrder = async () => {
     await updateOrderStatus(order.value.id, 'paid')
     // 刷新订单数据
     await loadOrderDetail(order.value.id)
-    alert('支付成功！')
+    toast.success('支付成功！')
   } catch (error) {
     console.error('支付失败：', error)
-    alert('支付失败，请重试')
+    toast.error('支付失败，请重试')
   }
 }
 

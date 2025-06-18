@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'
 import { useUserStore } from '@/stores/user'
+import { toast } from '@/utils/toast'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -12,6 +13,8 @@ const userStore = useUserStore()
 onMounted(() => {
   if (userStore.isAuthenticated) {
     cartStore.fetchCartList()
+  } else {
+    router.push('/login')
   }
 })
 
@@ -19,18 +22,28 @@ onMounted(() => {
 const updateQuantity = async (id, quantity) => {
   if (quantity < 1) return
   try {
-    await cartStore.updateItemQuantity(id, quantity)
+    const success = await cartStore.updateItemQuantity(id, quantity)
+    if (success) {
+      toast.success('数量已更新')
+    } else {
+      toast.error('更新失败，请重试')
+    }
   } catch (error) {
-    // 处理错误
+    toast.error('更新失败，请重试')
   }
 }
 
 // 删除商品
 const removeItem = async (id) => {
   try {
-    await cartStore.removeItem(id)
+    const success = await cartStore.removeItem(id)
+    if (success) {
+      toast.success('商品已移除')
+    } else {
+      toast.error('移除失败，请重试')
+    }
   } catch (error) {
-    // 处理错误
+    toast.error('移除失败，请重试')
   }
 }
 
@@ -41,6 +54,10 @@ const continueShopping = () => {
 
 // 去结算
 const checkout = () => {
+  if (cartStore.isEmpty) {
+    toast.warning('购物车为空，请先添加商品')
+    return
+  }
   router.push('/checkout')
 }
 </script>
@@ -74,6 +91,9 @@ const checkout = () => {
             <div class="item-info">
               <h3>{{ item.name }}</h3>
               <p class="item-desc">{{ item.description }}</p>
+              <div class="item-size" v-if="item.size">
+                <span>{{ item.productType === 'shoes' ? '鞋码' : '尺码' }}: {{ item.size }}</span>
+              </div>
               <div class="item-price">
                 <span class="current-price">¥{{ item.price }}</span>
                 <span v-if="item.originalPrice" class="original-price">
@@ -226,6 +246,12 @@ h1 {
 }
 
 .item-desc {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.item-size {
   color: #666;
   font-size: 14px;
   margin-bottom: 12px;

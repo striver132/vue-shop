@@ -78,7 +78,15 @@
         "材质": "100%棉",
         "产地": "中国",
         "款式": "修身"
-      }
+      },
+      "productType": "clothing",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
     },
     {
       "id": "2",
@@ -106,7 +114,15 @@
         "材质": "聚酯纤维",
         "产地": "中国",
         "款式": "A字裙"
-      }
+      },
+      "productType": "clothing",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
     },
     {
       "id": "3",
@@ -133,7 +149,18 @@
         "材质": "网布+橡胶",
         "产地": "越南",
         "款式": "运动"
-      }
+      },
+      "productType": "shoes",
+      "sizes": [
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45
+      ]
     },
     {
       "id": "4",
@@ -161,7 +188,11 @@
         "材质": "PU革",
         "产地": "中国",
         "款式": "单肩"
-      }
+      },
+      "productType": "accessory",
+      "sizes": [
+        "均码"
+      ]
     },
     {
       "id": "5",
@@ -188,7 +219,15 @@
         "材质": "牛仔布",
         "产地": "中国",
         "款式": "宽松"
-      }
+      },
+      "productType": "clothing",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
     }
   ],
   "users": [
@@ -218,15 +257,14 @@
         }
       ],
       "totalAmount": 698,
-      "status": "paid",
-      "createdAt": "2024-03-15T10:00:00.000Z",
       "shippingAddress": {
         "name": "张三",
         "phone": "13800138000",
         "address": "北京市朝阳区xxx街道xxx号",
         "zipCode": "100000"
       },
-      "updatedAt": "2025-06-17T03:19:14.456Z"
+      "status": "paid",
+      "createdAt": "2024-03-15T10:00:00.000Z"
     },
     {
       "id": "bdf2",
@@ -276,9 +314,53 @@
       "status": "paid",
       "createdAt": "2025-06-17T03:56:08.415Z",
       "updatedAt": "2025-06-17T04:07:32.079Z"
+    },
+    {
+      "id": "9c1c",
+      "userId": 1,
+      "products": [
+        {
+          "productId": "456d",
+          "quantity": 1,
+          "price": 399
+        }
+      ],
+      "totalAmount": 399,
+      "shippingAddress": {
+        "name": "Quo pariatur Lorem ",
+        "phone": "13245678910",
+        "address": "Ea impedit labore v",
+        "zipCode": "Dolorem sapiente ver"
+      },
+      "status": "pending",
+      "createdAt": "2025-06-18T01:31:21.426Z"
+    },
+    {
+      "id": "b7bd",
+      "userId": 1,
+      "products": [
+        {
+          "productId": "2",
+          "quantity": 1,
+          "price": 399
+        },
+        {
+          "productId": "3",
+          "quantity": 1,
+          "price": 599
+        }
+      ],
+      "totalAmount": 998,
+      "shippingAddress": {
+        "name": "Recusandae Incididu",
+        "phone": "13245678910",
+        "address": "Provident vel labor",
+        "zipCode": "Consequatur autem no"
+      },
+      "status": "paid",
+      "createdAt": "2025-06-18T01:33:04.255Z",
+      "updatedAt": "2025-06-18T01:33:08.701Z"
     }
   ],
-  "cart": [
-    
-  ]
+  "cart": []
 }

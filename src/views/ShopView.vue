@@ -2,8 +2,10 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIntersectionObserver } from '@vueuse/core'
+import { useCartStore } from '@/stores/cart'
 
 const router = useRouter()
+const cartStore = useCartStore()
 
 // 分类数据
 const categories = [
@@ -98,6 +100,16 @@ const handleCategorySelect = (categoryId) => {
 // 前往商品详情
 const goToProduct = (productId) => {
   router.push(`/product/${productId}`)
+}
+
+// 添加到购物车
+const addToCart = (event, product) => {
+  event.stopPropagation() // 阻止事件冒泡，避免触发商品详情跳转
+  // 这里添加购物车逻辑
+  console.log('添加到购物车:', product.name)
+  console.log(product);
+  // TODO: 实现购物车功能
+  
 }
 
 // 格式化价格显示
@@ -197,11 +209,20 @@ onMounted(() => {
         <div class="product-info">
           <h3 class="product-name">{{ product.name }}</h3>
           <p class="product-description">{{ product.description }}</p>
-          <div class="product-price">
-            <span class="current-price">¥{{ product.price }}</span>
-            <span class="original-price" v-if="product.originalPrice">
-              ¥{{ product.originalPrice }}
-            </span>
+          <div class="product-footer">
+            <div class="product-price">
+              <span class="current-price">¥{{ product.price }}</span>
+              <span class="original-price" v-if="product.originalPrice">
+                ¥{{ product.originalPrice }}
+              </span>
+            </div>
+            <button 
+              class="cart-btn" 
+              @click="addToCart($event, product)"
+              title="添加到购物车"
+            >
+              <i class="fas fa-cart-plus"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -375,6 +396,12 @@ onMounted(() => {
   overflow: hidden;
 }
 
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .product-price {
   display: flex;
   align-items: center;
@@ -391,6 +418,26 @@ onMounted(() => {
   font-size: 14px;
   color: #999;
   text-decoration: line-through;
+}
+
+.cart-btn {
+  background: #1a237e;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.cart-btn:hover {
+  background: #303f9f;
+  transform: scale(1.1);
 }
 
 .loading-trigger {

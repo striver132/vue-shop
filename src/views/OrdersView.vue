@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { getUserOrders, updateOrderStatus } from '@/api/orders'
 import { getProductDetail } from '@/api/cart'
 import { useUserStore } from '@/stores/user'
+import { toast } from '@/utils/toast'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -50,6 +51,7 @@ const loadOrders = async () => {
     // 加载所有订单中商品的详细信息
     for (const order of orders.value) {
       for (const product of order.products) {
+        console.log(product.productId);
         await loadProductDetails(product.productId)
       }
     }
@@ -71,10 +73,10 @@ const handlePayOrder = async (orderId) => {
     await updateOrderStatus(orderId, 'paid')
     // 刷新订单列表
     loadOrders()
-    alert('支付成功！')
+    toast.success('支付成功！')
   } catch (error) {
     console.error('支付失败：', error)
-    alert('支付失败，请重试')
+    toast.error('支付失败，请重试')
   }
 }
 

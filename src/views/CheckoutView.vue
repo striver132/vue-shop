@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'
 import { useUserStore } from '@/stores/user'
 import { createOrder } from '@/api/orders'
+import { toast } from '@/utils/toast'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -77,7 +78,7 @@ const submitOrder = async () => {
     const orderData = {
       userId: userStore.userId,
       products: cartStore.items.map(item => ({
-        productId: item.id,
+        productId: item.productId,
         quantity: item.quantity,
         price: item.price
       })),
@@ -85,18 +86,19 @@ const submitOrder = async () => {
       shippingAddress: { ...shippingInfo.value },
       status: 'pending'
     }
-
     // 创建订单
     const order = await createOrder(orderData)
     
     // 清空购物车
     await cartStore.clearCart()
+    
+    toast.success('订单创建成功！')
 
     // 跳转到订单详情页
     router.push(`/order/${order.id}`)
   } catch (error) {
     console.error('创建订单失败：', error)
-    alert('创建订单失败，请重试')
+    toast.error('创建订单失败，请重试')
   } finally {
     loading.value = false
   }

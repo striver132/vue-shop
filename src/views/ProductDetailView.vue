@@ -1,25 +1,48 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { getProductDetail } from '@/api/cart'
+import { toast } from '@/utils/toast'
+import { useCartStore } from '@/stores/cart'
+import { useUserStore } from '@/stores/user'
 
 const route = useRoute()
+const router = useRouter()
+const cartStore = useCartStore()
+const userStore = useUserStore()
 const productId = route.params.id
+
 
 const product = ref(null)
 const loading = ref(true)
 const error = ref('')
 const selectedImage = ref('')
 const selectedSize = ref('')
+const quantity = ref(1)
 const addToCartLoading = ref(false)
+
+// 尺码类型映射
+const sizeTypeLabels = {
+  'clothing': '尺码',
+  'shoes': '鞋码',
+  'accessory': '规格'
+}
+
+// 计算属性：获取尺码类型标签
+const sizeTypeLabel = computed(() => {
+  if (!product.value) return '尺码'
+  return sizeTypeLabels[product.value.productType] || '尺码'
+})
+
+// 计算属性：判断是否有尺码选择
+const hasSizes = computed(() => {
+  return product.value && product.value.sizes && product.value.sizes.length > 0
+})
 
 onMounted(async () => {
   try {
     loading.value = true
     const res = await getProductDetail(productId)
-    console.log(res);
-    console.log('res');
-
     
     product.value = res
     selectedImage.value = res.images && res.images.length ? res.images[0] : res.image
@@ -34,15 +57,61 @@ onMounted(async () => {
 const handleSelectImage = (img) => {
   selectedImage.value = img
 }
+
 const handleSelectSize = (size) => {
   selectedSize.value = size
 }
-const handleAddToCart = () => {
+
+// 增加数量
+const increaseQuantity = () => {
+  if (product.value && quantity.value < product.value.stock) {
+    quantity.value++
+  }
+}
+
+// 减少数量
+const decreaseQuantity = () => {
+  if (quantity.value > 1) {
+    quantity.value--
+  }
+}
+
+// 添加到购物车
+const handleAddToCart = async () => {
+  // 检查登录状态
+  if (!userStore.isAuthenticated) {
+    toast.warning('请先登录')
+    router.push('/login')
+    return
+  }
+  
+  // 检查是否选择了尺码（如果有尺码选项）
+  if (hasSizes.value && !selectedSize.value) {
+    toast.warning(`请选择${sizeTypeLabel.value}`)
+    return
+  }
+  
   addToCartLoading.value = true
-  setTimeout(() => {
+  
+  try {
+    // 添加到购物车
+    const success = await cartStore.addToCart({
+      productId: productId,
+      quantity: quantity.value,
+      size: selectedSize.value
+    })
+    
+    if (success) {
+      toast.success('已加入购物车！')
+    } else {
+      toast.error('添加失败，请重试')
+    }
+  } catch (error) {
+    console.error('添加到购物车失败：', error)
+    toast.error('添加失败，请重试')
+  } finally {
     addToCartLoading.value = false
-    alert('已加入购物车！')
-  }, 800)
+  }
 }
 </script>
 
@@ -88,18 +157,66 @@ const handleAddToCart = () => {
             <span class="tag" v-for="tag in product.tags" :key="tag">{{ tag }}</span>
           </div>
           <div class="stock">库存：{{ product.stock }}</div>
-          <div class="size-select">
-            <div class="label">尺码</div>
+          
+          <!-- 尺码选择区域 - 根据商品类型显示不同的尺码选项 -->
+          <div class="size-select" v-if="hasSizes">
+            <div class="label">{{ sizeTypeLabel }}</div>
             <div class="size-options">
+              <!-- 服装尺码 -->
+              <template v-if="product.productType === 'clothing'">
+                <button 
+                  v-for="size in product.sizes" 
+                  :key="size"
+                  :class="['size-btn', { selected: selectedSize === size }]"
+                  @click="handleSelectSize(size)">
+                  {{ size }}
+                </button>
+              </template>
+              
+              <!-- 鞋子尺码 -->
+              <template v-else-if="product.productType === 'shoes'">
+                <button 
+                  v-for="size in product.sizes" 
+                  :key="size"
+                  :class="['size-btn', { selected: selectedSize === size }]"
+                  @click="handleSelectSize(size)">
+                  {{ size }}
+                </button>
+              </template>
+              
+              <!-- 配饰尺码/规格 -->
+              <template v-else-if="product.productType === 'accessory'">
+                <button 
+                  v-for="size in product.sizes" 
+                  :key="size"
+                  :class="['size-btn', { selected: selectedSize === size }]"
+                  @click="handleSelectSize(size)">
+                  {{ size }}
+                </button>
+              </template>
+            </div>
+          </div>
+          
+          <!-- 数量选择 -->
+          <div class="quantity-select">
+            <div class="label">数量</div>
+            <div class="quantity-control">
               <button 
-                v-for="size in [38,39,40,41,42,43,44,45]" 
-                :key="size"
-                :class="['size-btn', { selected: selectedSize === size }]"
-                @click="handleSelectSize(size)">
-                {{ size }}
+                @click="decreaseQuantity"
+                :disabled="quantity <= 1"
+              >
+                <i class="fas fa-minus"></i>
+              </button>
+              <span>{{ quantity }}</span>
+              <button 
+                @click="increaseQuantity"
+                :disabled="quantity >= product.stock"
+              >
+                <i class="fas fa-plus"></i>
               </button>
             </div>
           </div>
+          
           <button class="add-cart-btn" :disabled="addToCartLoading" @click="handleAddToCart">
             <span v-if="addToCartLoading">加入中...</span>
             <span v-else><i class="fas fa-shopping-cart"></i> 加入购物车</span>
@@ -332,5 +449,42 @@ const handleAddToCart = () => {
   color: #f44336;
   font-size: 18px;
   padding: 60px 0;
+}
+
+/* 添加数量选择样式 */
+.quantity-select {
+  margin-top: 12px;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.quantity-control button {
+  width: 36px;
+  height: 36px;
+  background: #f5f5f5;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-control button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.quantity-control span {
+  width: 50px;
+  text-align: center;
+  font-size: 16px;
 }
 </style> 
