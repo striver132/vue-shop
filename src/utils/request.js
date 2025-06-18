@@ -8,11 +8,11 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   config => {
-    // 可以在这里添加token等认证信息
-    // const token = localStorage.getItem('token')
-    // if (token) {
-    //   config.headers['Authorization'] = `Bearer ${token}`
-    // }
+    // 添加token等认证信息
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
     return config
   },
   error => {

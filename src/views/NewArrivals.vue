@@ -208,7 +208,7 @@ const handleNavigation = (path) => {
       </div>
     </section>
     
-    <!-- 新品推荐部分 -->
+    <!-- 新品推荐部分
     <section class="new-products">
       <div class="section-subheader">
         <h2>全部新品</h2>
@@ -238,7 +238,7 @@ const handleNavigation = (path) => {
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
   </main>
 </template>
 

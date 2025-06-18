@@ -18,6 +18,19 @@ export function createOrder(orderData) {
 }
 
 /**
+ * 直接购买商品（跳过购物车）
+ * @param {Object} orderData - 订单数据
+ * @returns {Promise} 返回创建的订单
+ */
+export function buyNow(orderData) {
+  return request({
+    url: '/orders',
+    method: 'post',
+    data: orderData
+  })
+}
+
+/**
  * 获取用户订单列表
  * @param {number} userId - 用户ID
  * @returns {Promise} 返回订单列表
@@ -58,3 +71,16 @@ export function updateOrderStatus(orderId, status) {
     }
   })
 }
+
+/**
+ * 删除订单
+ * @param {string} orderId - 订单ID
+ * @returns {Promise} 返回删除结果
+ */
+export function deleteOrder(orderId) {
+  return request({
+    url: `/orders/${orderId}`,
+    method: 'delete'
+  })
+}
+

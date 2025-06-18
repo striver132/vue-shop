@@ -12,6 +12,11 @@ const orders = ref([])
 const loading = ref(false)
 const productsCache = ref(new Map())
 
+// 确认弹窗状态
+const showConfirmDialog = ref(false)
+const orderToDelete = ref(null)
+const dialogAction = ref('') // 'cancel' 或 'delete'
+
 // 订单状态映射
 const statusMap = {
   'pending': { text: '待支付', color: '#ff9800' },
@@ -78,6 +83,54 @@ const handlePayOrder = async (orderId) => {
     console.error('支付失败：', error)
     toast.error('支付失败，请重试')
   }
+}
+
+// 打开取消订单确认弹窗
+const confirmCancelOrder = (order) => {
+  orderToDelete.value = order
+  dialogAction.value = 'cancel'
+  showConfirmDialog.value = true
+}
+
+// 打开删除订单确认弹窗
+const confirmDeleteOrder = (order) => {
+  orderToDelete.value = order
+  dialogAction.value = 'delete'
+  showConfirmDialog.value = true
+}
+
+// 执行订单操作（取消或删除）
+const executeOrderAction = async () => {
+  if (!orderToDelete.value) return
+  
+  try {
+    if (dialogAction.value === 'cancel') {
+      // 取消订单
+      await updateOrderStatus(orderToDelete.value.id, 'cancelled')
+      toast.success('订单已取消')
+    } else if (dialogAction.value === 'delete') {
+      // 删除订单 - 这里使用模拟删除，实际应该调用删除API
+      // 在真实环境中，你需要实现一个删除订单的API
+      await fetch(`/api/orders/${orderToDelete.value.id}`, {
+        method: 'DELETE'
+      })
+      toast.success('订单已删除')
+    }
+    
+    // 关闭弹窗并重新加载订单
+    showConfirmDialog.value = false
+    orderToDelete.value = null
+    loadOrders()
+  } catch (error) {
+    console.error('操作失败：', error)
+    toast.error(`${dialogAction.value === 'cancel' ? '取消' : '删除'}订单失败，请重试`)
+  }
+}
+
+// 取消操作
+const cancelAction = () => {
+  showConfirmDialog.value = false
+  orderToDelete.value = null
 }
 
 // 查看订单详情
@@ -168,6 +221,19 @@ onMounted(() => {
               >
                 立即支付
               </button>
+              <button 
+                v-if="order.status === 'pending'"
+                class="action-btn cancel"
+                @click="confirmCancelOrder(order)"
+              >
+                取消订单
+              </button>
+              <button 
+                class="action-btn delete"
+                @click="confirmDeleteOrder(order)"
+              >
+                删除订单
+              </button>
             </div>
           </div>
         </div>
@@ -179,6 +245,21 @@ onMounted(() => {
         <button class="shop-btn" @click="router.push('/shop')">
           去购物
         </button>
+      </div>
+      
+      <!-- 确认弹窗 -->
+      <div v-if="showConfirmDialog" class="confirm-dialog-overlay">
+        <div class="confirm-dialog">
+          <h3>{{ dialogAction === 'cancel' ? '确认取消订单' : '确认删除订单' }}</h3>
+          <p>您确定要{{ dialogAction === 'cancel' ? '取消' : '删除' }}订单 <strong>{{ orderToDelete?.id }}</strong> 吗？</p>
+          <p class="warning-text">此操作不可恢复！</p>
+          <div class="dialog-actions">
+            <button class="cancel-btn" @click="cancelAction">取消</button>
+            <button class="confirm-btn" @click="executeOrderAction">
+              确认{{ dialogAction === 'cancel' ? '取消' : '删除' }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -349,6 +430,24 @@ onMounted(() => {
   background: #283593;
 }
 
+.action-btn.cancel {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.action-btn.cancel:hover {
+  background: #ffcdd2;
+}
+
+.action-btn.delete {
+  background: #424242;
+  color: white;
+}
+
+.action-btn.delete:hover {
+  background: #212121;
+}
+
 /* 加载状态 */
 .loading-state {
   text-align: center;
@@ -394,6 +493,79 @@ onMounted(() => {
   background: #283593;
 }
 
+/* 确认弹窗样式 */
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirm-dialog {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-dialog h3 {
+  color: #1a237e;
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.confirm-dialog p {
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.warning-text {
+  color: #f44336;
+  font-weight: 500;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.cancel-btn, .confirm-btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background: #d0d0d0;
+}
+
+.confirm-btn {
+  background: #f44336;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background: #d32f2f;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .orders {
@@ -419,6 +591,7 @@ onMounted(() => {
   .order-actions {
     width: 100%;
     justify-content: flex-end;
+    flex-wrap: wrap;
   }
 
   .product-item {

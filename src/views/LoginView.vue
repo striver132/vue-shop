@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 const loginForm = ref({
@@ -24,12 +25,28 @@ const handleLogin = async () => {
   errorMessage.value = ''
 
   try {
-    const success = await userStore.login(loginForm.value)
-    if (success) {
-      router.push('/')
+    // 模拟API调用
+    // 在实际应用中，这里应该发送请求到后端API
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    // 模拟登录成功
+    const userData = {
+      id: 1,
+      username: loginForm.value.username,
+      name: '用户_' + loginForm.value.username,
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
     }
+    const userToken = 'mock_token_' + Date.now()
+    
+    // 调用store的login方法，传入用户数据和token
+    userStore.login(userData, userToken)
+    
+    // 登录成功后跳转
+    const redirectPath = route.query.redirect || '/'
+    router.push(redirectPath)
   } catch (error) {
     errorMessage.value = '登录失败，请稍后重试'
+    console.error('登录错误:', error)
   } finally {
     loading.value = false
   }

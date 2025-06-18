@@ -5,6 +5,7 @@ import { getProductDetail } from '@/api/cart'
 import { toast } from '@/utils/toast'
 import { useCartStore } from '@/stores/cart'
 import { useUserStore } from '@/stores/user'
+import { buyNow } from '@/api/orders'
 
 const route = useRoute()
 const router = useRouter()
@@ -20,6 +21,7 @@ const selectedImage = ref('')
 const selectedSize = ref('')
 const quantity = ref(1)
 const addToCartLoading = ref(false)
+const buyNowLoading = ref(false)
 
 // 尺码类型映射
 const sizeTypeLabels = {
@@ -111,6 +113,61 @@ const handleAddToCart = async () => {
     toast.error('添加失败，请重试')
   } finally {
     addToCartLoading.value = false
+  }
+}
+
+// 添加立即购买处理函数
+const handleBuyNow = async () => {
+  if (!userStore.isAuthenticated) {
+    toast.warning('请先登录')
+    router.push({ 
+      path: '/login', 
+      query: { redirect: route.fullPath } 
+    })
+    return
+  }
+  
+  if (!selectedSize.value && product.value.sizes?.length > 0) {
+    toast.warning(`请选择${sizeTypeLabel.value}`)
+    return
+  }
+  
+  buyNowLoading.value = true
+  
+  try {
+    // 构建订单数据，与db.json中的orders结构匹配
+    const orderData = {
+      userId: userStore.userId,
+      products: [
+        {
+          productId: product.value.id,
+          quantity: quantity.value,
+          price: product.value.price
+        }
+      ],
+      totalAmount: product.value.price * quantity.value,
+      status: "pending",
+      createdAt: new Date().toISOString()
+    }
+    
+    // 调用API创建订单
+    const order = await buyNow(orderData)
+    
+    if (order && order.id) {
+      toast.success('订单已创建，请完成支付')
+      // 跳转到结账页面
+      router.push({
+        path: '/checkout',
+        query: { orderId: order.id }
+      })
+    } else {
+      toast.error('创建订单失败')
+    }
+  } catch (error) {
+    console.error('购买失败:', error)
+    toast.error('购买失败，请稍后重试')
+  } finally {
+    buyNowLoading.value = false
   }
 }
 </script>
@@ -221,6 +278,12 @@ const handleAddToCart = async () => {
             <span v-if="addToCartLoading">加入中...</span>
             <span v-else><i class="fas fa-shopping-cart"></i> 加入购物车</span>
           </button>
+          
+          <button class="buy-now-btn" :disabled="buyNowLoading" @click="handleBuyNow">
+            <span v-if="buyNowLoading">处理中...</span>
+            <span v-else><i class="fas fa-bolt"></i> 立即购买</span>
+          </button>
+          
           <div class="desc">
             <h3>商品描述</h3>
             <p>{{ product.description }}</p>
@@ -391,6 +454,7 @@ const handleAddToCart = async () => {
   cursor: pointer;
   font-weight: 600;
   transition: background 0.2s;
+  margin-bottom: 12px;
 }
 .add-cart-btn:disabled {
   background: #9fa8da;
@@ -398,6 +462,25 @@ const handleAddToCart = async () => {
 }
 .add-cart-btn i {
   margin-right: 8px;
+}
+.buy-now-btn {
+  width: 100%;
+  padding: 14px 0;
+  background: #f44336;
+  color: #fff;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.buy-now-btn:hover {
+  background: #e53935;
+}
+.buy-now-btn:disabled {
+  background: #ef9a9a;
+  cursor: not-allowed;
 }
 .desc {
   margin-top: 24px;

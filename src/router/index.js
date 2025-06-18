@@ -5,6 +5,8 @@ import LoginView from '@/views/LoginView.vue'
 import CartView from '@/views/CartView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import ProductDetailView from '@/views/ProductDetailView.vue'
+import NotFound from '@/views/NotFound.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -70,6 +72,12 @@ const router = createRouter({
       path: '/new-arrivals',
       name: 'new-arrivals',
       component: () => import('@/views/NewArrivals.vue')
+    },
+    // 404页面路由 - 必须放在最后
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFound
     }
   ]
 })
@@ -80,7 +88,10 @@ router.beforeEach((to, from, next) => {
   
   // 只检查需要认证的路由
   if (to.meta.requiresAuth && !userStore.isAuthenticated) {
-    next('/login')
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    })
   } else {
     next()
   }

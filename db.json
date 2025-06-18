@@ -267,7 +267,8 @@
       "createdAt": "2024-03-15T10:00:00.000Z"
     },
     {
-      "id": "bdf2",
+      "id": "2",
+      "userId": 1,
       "products": [
         {
           "productId": "1",
@@ -287,79 +288,45 @@
         "address": "Quia doloribus quo e",
         "zipCode": "Ut laudantium ut ip"
       },
-      "status": "pending",
-      "createdAt": "2025-06-17T03:53:20.514Z"
+      "status": "cancelled",
+      "createdAt": "2025-06-17T03:53:20.514Z",
+      "updatedAt": "2025-06-18T13:30:44.228Z"
     },
     {
-      "id": "c0df",
+      "id": "07db",
+      "userId": 1,
       "products": [
-        {
-          "productId": "1",
-          "quantity": 3,
-          "price": 299
-        },
         {
           "productId": "3",
           "quantity": 1,
           "price": 599
         }
       ],
-      "totalAmount": 1496,
-      "shippingAddress": {
-        "name": "Quos molestiae obcae",
-        "phone": "17175611245",
-        "address": "Nobis possimus saep",
-        "zipCode": "Iure dolore aut prae"
-      },
+      "totalAmount": 599,
       "status": "paid",
-      "createdAt": "2025-06-17T03:56:08.415Z",
-      "updatedAt": "2025-06-17T04:07:32.079Z"
+      "createdAt": "2025-06-18T13:41:20.713Z",
+      "updatedAt": "2025-06-18T13:42:16.151Z"
     },
     {
-      "id": "9c1c",
-      "userId": 1,
-      "products": [
-        {
-          "productId": "456d",
-          "quantity": 1,
-          "price": 399
-        }
-      ],
-      "totalAmount": 399,
-      "shippingAddress": {
-        "name": "Quo pariatur Lorem ",
-        "phone": "13245678910",
-        "address": "Ea impedit labore v",
-        "zipCode": "Dolorem sapiente ver"
-      },
-      "status": "pending",
-      "createdAt": "2025-06-18T01:31:21.426Z"
-    },
-    {
-      "id": "b7bd",
+      "id": "6ffd",
       "userId": 1,
       "products": [
         {
           "productId": "2",
           "quantity": 1,
           "price": 399
-        },
-        {
-          "productId": "3",
-          "quantity": 1,
-          "price": 599
         }
       ],
-      "totalAmount": 998,
+      "totalAmount": 399,
       "shippingAddress": {
-        "name": "Recusandae Incididu",
-        "phone": "13245678910",
-        "address": "Provident vel labor",
-        "zipCode": "Consequatur autem no"
+        "name": "Ipsa quia consequat",
+        "phone": "13256789101",
+        "address": "Amet dolorem exerci",
+        "zipCode": "Fugiat et quia magn"
       },
       "status": "paid",
-      "createdAt": "2025-06-18T01:33:04.255Z",
-      "updatedAt": "2025-06-18T01:33:08.701Z"
+      "createdAt": "2025-06-18T13:41:43.620Z",
+      "updatedAt": "2025-06-18T13:42:17.104Z"
     }
   ],
   "cart": []
