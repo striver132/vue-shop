@@ -28,3 +28,9 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# 忽略所有.glb文件
+*.glb
+
+# 忽略所有.gltf文件
+*.gltf

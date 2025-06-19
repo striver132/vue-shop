@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUserStore } from '@/stores/user'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import CartView from '@/views/CartView.vue'
@@ -84,16 +83,22 @@ const router = createRouter({
 
 // 简化路由守卫逻辑
 router.beforeEach((to, from, next) => {
-  const userStore = useUserStore()
+  // 使用localStorage直接检查是否已登录，避免在路由守卫中过早使用Pinia store
+  const isAuthenticated = !!localStorage.getItem('userInfo')
   
   // 只检查需要认证的路由
-  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+  if (to.meta.requiresAuth && !isAuthenticated) {
     next({
       path: '/login',
       query: { redirect: to.fullPath }
     })
   } else {
-    next()
+    // 如果用户已登录且尝试访问登录页，重定向到首页
+    if (isAuthenticated && to.path === '/login') {
+      next('/')
+    } else {
+      next()
+    }
   }
 })
 

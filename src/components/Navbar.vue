@@ -181,6 +181,19 @@ export default defineComponent({
         cartStore.fetchCartList()
       }
       document.addEventListener('click', handleClickOutside)
+      
+      // 确保用户状态已正确加载
+      if (localStorage.getItem('userInfo') && !userStore.isAuthenticated) {
+        try {
+          const userData = JSON.parse(localStorage.getItem('userInfo'))
+          const userToken = localStorage.getItem('token')
+          if (userData && userToken) {
+            userStore.login(userData, userToken)
+          }
+        } catch (error) {
+          console.error('Error loading user data:', error)
+        }
+      }
     })
 
     onUnmounted(() => {
